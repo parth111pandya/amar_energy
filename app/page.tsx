@@ -5,6 +5,7 @@ import Objectives from './components/Objectives'
 import Products from './components/Products'
 import Quality from './components/Quality'
 import Gallery from './components/Gallery'
+import VideoSection from './components/VideoSection'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
@@ -29,6 +30,9 @@ export default function Home() {
       </section>
       <section id="gallery">
         <Gallery />
+      </section>
+      <section id="video">
+        <VideoSection />
       </section>
       <section id="contact">
         <Contact />
