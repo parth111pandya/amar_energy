@@ -22,6 +22,10 @@ const allImages = [
   { src: '/gallery-mic8158.jpg',   alt: 'AMAR Solar Water Heater — Side Profile',             category: 'Product' },
   { src: '/gallery-mic8159.jpg',   alt: 'AMAR Solar Water Heater — Full System View',        category: 'Installation' },
   { src: '/gallery-mic8160.jpg',   alt: 'AMAR Solar Water Heater — Front View Close',        category: 'Product' },
+  { src: '/gallery-1.png',         alt: 'AMAR Energy Solar Installation',                    category: 'Installation' },
+  { src: '/gallery-2.png',         alt: 'AMAR Energy Solar Installation',                    category: 'Installation' },
+  { src: '/gallery-3.png',         alt: 'AMAR Energy Solar Installation',                    category: 'Installation' },
+  { src: '/gallery-4.png',         alt: 'AMAR Energy Solar Installation',                    category: 'Installation' },
 ]
 
 const categories = ['All', 'Product', 'Installation']

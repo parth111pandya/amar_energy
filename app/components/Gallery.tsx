@@ -13,7 +13,10 @@ const images = [
   { src: '/banner-1.jpg', alt: 'Amar Energy Solar Installation Field Overview' },
   { src: '/banner-2.jpg', alt: 'Solar Water Heater Product Detail' },
   { src: '/gallery-1.jpeg', alt: 'Amar Energy Installation in Progress' },
-
+  { src: '/gallery-1.png', alt: 'Amar Energy Solar Installation' },
+  { src: '/gallery-2.png', alt: 'Amar Energy Solar Installation' },
+  { src: '/gallery-3.png', alt: 'Amar Energy Solar Installation' },
+  { src: '/gallery-4.png', alt: 'Amar Energy Solar Installation' },
 ]
 
 export default function Gallery() {
