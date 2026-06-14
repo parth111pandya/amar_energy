@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { ChevronDown, Menu, X, Sun } from 'lucide-react'
 
@@ -16,13 +17,19 @@ const navLinks = [
 ]
 
 const products = [
-  { label: 'Amar Solar Water Heaters',         href: '#products' },
-  { label: 'Amar Solar Water Heating Systems', href: '#products' },
+  { label: 'Amar Solar Water Heaters',         href: '/products/solar-water-heaters' },
+  { label: 'Amar Solar Water Heating Systems', href: '/products/solar-water-heating-systems' },
 ]
 
 export default function Navigation() {
-  const [scrolled, setScrolled]   = useState(false)
-  const [menuOpen, setMenuOpen]   = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+
+  // On non-home pages always use the opaque/dark style; on home use scroll-based
+  const isHome = pathname === '/'
+  const opaque = !isHome || scrolled
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
@@ -32,14 +39,19 @@ export default function Navigation() {
 
   const handleNav = (href: string) => {
     setMenuOpen(false)
-    const el = document.querySelector(href)
-    el?.scrollIntoView({ behavior: 'smooth' })
+    if (isHome) {
+      // Already on home — just scroll to the section
+      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      // On another page — navigate to home with the hash so the browser scrolls after load
+      router.push(`/${href}`)
+    }
   }
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
-        scrolled
+        opaque
           ? 'bg-white/60 backdrop-blur-xl border-white/40 shadow-lg shadow-black/5'
           : 'bg-white/10 backdrop-blur-md border-white/10'
       }`}
@@ -66,7 +78,7 @@ export default function Navigation() {
                   key={link.href}
                   href={link.href}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    scrolled
+                    opaque
                       ? 'text-slate-700 hover:text-solar-600 hover:bg-solar-50'
                       : 'text-white/90 hover:text-white hover:bg-white/10'
                   }`}
@@ -78,7 +90,7 @@ export default function Navigation() {
                   key={link.href}
                   onClick={() => handleNav(link.href)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    scrolled
+                    opaque
                       ? 'text-slate-700 hover:text-solar-600 hover:bg-solar-50'
                       : 'text-white/90 hover:text-white hover:bg-white/10'
                   }`}
@@ -93,7 +105,7 @@ export default function Navigation() {
               <DropdownMenu.Trigger asChild>
                 <button
                   className={`flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    scrolled
+                    opaque
                       ? 'text-slate-700 hover:text-solar-600 hover:bg-solar-50'
                       : 'text-white/90 hover:text-white hover:bg-white/10'
                   }`}
@@ -107,13 +119,15 @@ export default function Navigation() {
                   sideOffset={8}
                 >
                   {products.map((p) => (
-                    <DropdownMenu.Item
-                      key={p.label}
-                      onClick={() => handleNav(p.href)}
-                      className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-slate-700 hover:bg-solar-50 hover:text-solar-700 cursor-pointer outline-none transition-colors"
-                    >
-                      <Sun className="w-4 h-4 text-solar-500 flex-shrink-0" />
-                      {p.label}
+                    <DropdownMenu.Item key={p.label} asChild>
+                      <Link
+                        href={p.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-slate-700 hover:bg-solar-50 hover:text-solar-700 cursor-pointer outline-none transition-colors"
+                      >
+                        <Sun className="w-4 h-4 text-solar-500 flex-shrink-0" />
+                        {p.label}
+                      </Link>
                     </DropdownMenu.Item>
                   ))}
                 </DropdownMenu.Content>
@@ -130,7 +144,7 @@ export default function Navigation() {
 
           {/* Mobile menu toggle */}
           <button
-            className={`lg:hidden p-2 rounded-lg transition-colors ${scrolled ? 'text-slate-700' : 'text-white'}`}
+            className={`lg:hidden p-2 rounded-lg transition-colors ${opaque ? 'text-slate-700' : 'text-white'}`}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -166,14 +180,15 @@ export default function Navigation() {
             <div className="border-t border-slate-100 pt-2 mt-2">
               <p className="px-4 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Products</p>
               {products.map((p) => (
-                <button
+                <Link
                   key={p.label}
-                  onClick={() => handleNav(p.href)}
+                  href={p.href}
+                  onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-2 w-full text-left px-4 py-3 text-slate-700 hover:text-solar-600 hover:bg-solar-50 rounded-lg text-sm transition-colors"
                 >
                   <Sun className="w-4 h-4 text-solar-500" />
                   {p.label}
-                </button>
+                </Link>
               ))}
             </div>
           </div>

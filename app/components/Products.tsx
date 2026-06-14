@@ -2,64 +2,13 @@
 
 import { motion } from 'framer-motion'
 import * as Tabs from '@radix-ui/react-tabs'
-import {
-  Droplets, ThermometerSun, Wrench, Battery, Timer, Shield, Zap,
-  CheckCircle2, Sun, Clock, Ruler, Factory, Activity,
-} from 'lucide-react'
+import { CheckCircle2, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { products, tagColors } from '../data/products'
+import type { Feature } from '../data/products'
 
-const domesticFeatures = [
-  { icon: ThermometerSun, text: "Delivers hot water at 60°C", tag: 'Performance' },
-  { icon: Sun, text: "World's latest solar heating technology", tag: 'Technology' },
-  { icon: Shield, text: "Specially designed for Indian conditions", tag: 'Local Fit' },
-  { icon: Zap, text: "Highly economical & energy-saving", tag: 'Savings' },
-  { icon: CheckCircle2, text: "Best vacuum insulated borosilicate glass tube", tag: 'Material' },
-  { icon: CheckCircle2, text: "Specially black coated double-layered glass tube", tag: 'Material' },
-  { icon: Ruler, text: "Compact occupies less space vs flat-plate systems", tag: 'Design' },
-  { icon: Droplets, text: "Suitable for hard water areas", tag: 'Versatility' },
-  { icon: Shield, text: "PUFF insulated SS / MS / AL / CU tank options", tag: 'Build' },
-  { icon: Wrench, text: "Screwless fitting stainless-steel tanks", tag: 'Build' },
-  { icon: Battery, text: "Electrical backup for non-sunny days", tag: 'Reliability' },
-  { icon: CheckCircle2, text: "Nil maintenance after installation", tag: 'Convenience' },
-  { icon: Clock, text: "Long lifespan of 20 years", tag: 'Durability' },
-  { icon: Sun, text: "Available in various capacities", tag: 'Flexibility' },
-  { icon: Sun, text: "Auto sun-tracking via round tube surface", tag: 'Technology' },
-  { icon: Timer, text: "Starts heating water quickly", tag: 'Performance' },
-  { icon: ThermometerSun, text: "Thermo-siphon / Natural Convection principle", tag: 'Mechanism' },
-]
-
-const industrialFeatures = [
-  { icon: Factory, text: "Scalable capacity for commercial & industrial use", tag: 'Scalability' },
-  { icon: Droplets, text: "Designed for large-volume hot water requirements", tag: 'Capacity' },
-  { icon: Shield, text: "Heavy-duty construction for continuous operation", tag: 'Build' },
-  { icon: ThermometerSun, text: "Maintains consistent temperature throughout the day", tag: 'Performance' },
-  { icon: Zap, text: "Significant energy cost reduction for businesses", tag: 'Savings' },
-  { icon: Wrench, text: "Professional installation & commissioning", tag: 'Service' },
-  { icon: Activity, text: "24/7 system monitoring & performance analytics", tag: 'Monitoring' },
-  { icon: Battery, text: "Hybrid backup integration capability", tag: 'Reliability' },
-]
-
-const tagColors: Record<string, string> = {
-  Performance: 'bg-blue-100 text-blue-700',
-  Technology: 'bg-purple-100 text-purple-700',
-  'Local Fit': 'bg-green-100 text-green-700',
-  Savings: 'bg-solar-100 text-solar-700',
-  Material: 'bg-teal-100 text-teal-700',
-  Design: 'bg-pink-100 text-pink-700',
-  Versatility: 'bg-indigo-100 text-indigo-700',
-  Build: 'bg-slate-100 text-slate-700',
-  Reliability: 'bg-red-100 text-red-700',
-  Convenience: 'bg-yellow-100 text-yellow-700',
-  Durability: 'bg-emerald-100 text-emerald-700',
-  Flexibility: 'bg-cyan-100 text-cyan-700',
-  Mechanism: 'bg-violet-100 text-violet-700',
-  Scalability: 'bg-sky-100 text-sky-700',
-  Capacity: 'bg-blue-100 text-blue-700',
-  Service: 'bg-orange-100 text-orange-700',
-  Monitoring: 'bg-fuchsia-100 text-fuchsia-700',
-}
-
-function FeatureGrid({ features }: { features: typeof domesticFeatures }) {
+function FeatureGrid({ features }: { features: Feature[] }) {
   return (
     <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3 mt-8">
       {features.map((f, i) => (
@@ -86,6 +35,8 @@ function FeatureGrid({ features }: { features: typeof domesticFeatures }) {
     </div>
   )
 }
+
+const [domestic, industrial] = products
 
 export default function Products() {
   return (
@@ -143,48 +94,43 @@ export default function Products() {
                     <div className="sticky top-24 bg-gradient-to-br from-navy-900 to-navy-950 rounded-3xl p-8 text-white">
                       <div className="relative h-52 rounded-2xl overflow-hidden mb-6 bg-white/5">
                         <Image
-                          src="/banner-1.jpg"
-                          alt="AMAR Solar Water Heater"
+                          src={domestic.image}
+                          alt={domestic.name}
                           fill
                           className="object-cover"
-                          onError={(e) => {
-                            const parent = (e.target as HTMLImageElement).parentElement
-                            if (parent) parent.className = parent.className + ' flex items-center justify-center'
-                          }}
                         />
-
                       </div>
-                      <h3 className="text-xl font-bold">AMAR Solar Water Heaters</h3>
+                      <h3 className="text-xl font-bold">{domestic.name}</h3>
                       <p className="mt-3 text-white/70 text-sm leading-relaxed">
-                        Ideal for routine hot water requirements for bathing, washing, and household chores.
-                        Operates on the Thermo-siphon / Natural Convection principle, delivering reliable
-                        hot water at <span className="text-solar-400 font-semibold">60°C</span> even the next morning.
+                        {domestic.description.split(' at ')[0]} at{' '}
+                        <span className="text-solar-400 font-semibold">60°C</span>
+                        {domestic.description.split(' at ')[1] ? ' ' + domestic.description.split(' at ').slice(1).join(' at ').split('60°C').pop() : ''}
                       </p>
                       <div className="mt-6 space-y-3">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-white/60">Output Temperature</span>
-                          <span className="font-bold text-solar-400">60°C</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-white/60">Lifespan</span>
-                          <span className="font-bold text-solar-400">20 Years</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-white/60">Maintenance</span>
-                          <span className="font-bold text-green-400">Nil</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-white/60">Backup Power</span>
-                          <span className="font-bold text-solar-400">Electrical</span>
-                        </div>
+                        {domestic.specs.slice(0, 4).map((spec, i) => (
+                          <div key={i} className="flex justify-between text-sm">
+                            <span className="text-white/60">{spec.label}</span>
+                            <span className={`font-bold ${spec.value === 'Nil' ? 'text-green-400' : 'text-solar-400'}`}>
+                              {spec.value}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                      <a
-                        href="/e-catalogue-water-heater.pdf"
-                        download
-                        className="mt-6 flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
-                      >
-                        Download Catalogue
-                      </a>
+                      <div className="mt-6 flex flex-col gap-3">
+                        <a
+                          href={domestic.catalogueHref}
+                          download
+                          className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
+                        >
+                          Download Catalogue
+                        </a>
+                        <Link
+                          href={`/products/${domestic.slug}`}
+                          className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm"
+                        >
+                          View Full Details <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
 
@@ -195,7 +141,7 @@ export default function Products() {
                       <h4 className="font-bold text-navy-900 text-lg">17 Key Specifications</h4>
                     </div>
                     <p className="text-slate-500 text-sm">Every feature is engineered for superior performance and longevity.</p>
-                    <FeatureGrid features={domesticFeatures} />
+                    <FeatureGrid features={domestic.features} />
                   </div>
                 </div>
               </motion.div>
@@ -213,42 +159,38 @@ export default function Products() {
                     <div className="sticky top-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 text-white">
                       <div className="relative h-52 rounded-2xl overflow-hidden mb-6 bg-white/5">
                         <Image
-                          src="/banner-2.jpg"
-                          alt="AMAR Solar Water Heating System"
+                          src={industrial.image}
+                          alt={industrial.name}
                           fill
                           className="object-cover"
-                          onError={(e) => {
-                            const parent = (e.target as HTMLImageElement).parentElement
-                            if (parent) parent.className = parent.className + ' flex items-center justify-center'
-                          }}
                         />
                       </div>
-                      <h3 className="text-xl font-bold">AMAR Solar Water Heating Systems</h3>
+                      <h3 className="text-xl font-bold">{industrial.name}</h3>
                       <p className="mt-3 text-white/70 text-sm leading-relaxed">
-                        Industrial-scale solar heating systems built for hotels, hospitals, factories,
-                        hostels, and large residential complexes. Same world-class core technology,
-                        scaled for high-volume continuous hot water demand.
+                        {industrial.description}
                       </p>
                       <div className="mt-6 space-y-3">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-white/60">Scale</span>
-                          <span className="font-bold text-solar-400">Industrial</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-white/60">Monitoring</span>
-                          <span className="font-bold text-solar-400">24/7 Remote</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-white/60">Installation</span>
-                          <span className="font-bold text-solar-400">Professional</span>
-                        </div>
+                        {industrial.specs.slice(0, 3).map((spec, i) => (
+                          <div key={i} className="flex justify-between text-sm">
+                            <span className="text-white/60">{spec.label}</span>
+                            <span className="font-bold text-solar-400">{spec.value}</span>
+                          </div>
+                        ))}
                       </div>
-                      <button
-                        onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="mt-6 flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
-                      >
-                        Request Industrial Quote
-                      </button>
+                      <div className="mt-6 flex flex-col gap-3">
+                        <button
+                          onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+                          className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
+                        >
+                          Request Industrial Quote
+                        </button>
+                        <Link
+                          href={`/products/${industrial.slug}`}
+                          className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm"
+                        >
+                          View Full Details <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                   <div className="lg:col-span-3">
@@ -257,7 +199,7 @@ export default function Products() {
                       <h4 className="font-bold text-navy-900 text-lg">Industrial-Grade Features</h4>
                     </div>
                     <p className="text-slate-500 text-sm">Built for scale, continuity, and maximum energy savings.</p>
-                    <FeatureGrid features={industrialFeatures} />
+                    <FeatureGrid features={industrial.features} />
                   </div>
                 </div>
               </motion.div>
