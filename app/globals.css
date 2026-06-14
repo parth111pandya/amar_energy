@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --solar-500: #f97316;
+  --navy-900: #0c4a6e;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  @apply text-slate-800 bg-white;
+}
+
+@layer components {
+  .section-heading {
+    @apply text-3xl md:text-4xl font-bold text-navy-900;
+  }
+  .section-subheading {
+    @apply text-lg text-slate-600 mt-3 max-w-2xl;
+  }
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-solar-500 text-white font-semibold rounded-lg
+           hover:bg-solar-600 active:bg-solar-700 transition-colors duration-200 shadow-md;
+  }
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 border-2 border-solar-500 text-solar-600 font-semibold
+           rounded-lg hover:bg-solar-50 transition-colors duration-200;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-md p-6 border border-slate-100;
+  }
+}
+
+/* Embla carousel */
+.embla { overflow: hidden; }
+.embla__container { display: flex; }
+.embla__slide { flex: 0 0 100%; min-width: 0; }
+
+/* Radix accordion animations */
+@keyframes slideDown {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+@keyframes slideUp {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+.AccordionContent[data-state='open']  { animation: slideDown 200ms ease-out; }
+.AccordionContent[data-state='closed']{ animation: slideUp   200ms ease-out; }
