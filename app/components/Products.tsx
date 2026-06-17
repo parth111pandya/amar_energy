@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import * as Tabs from '@radix-ui/react-tabs'
-import { CheckCircle2, ArrowRight, Package } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Package, X, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { products, tagColors } from '../data/products'
@@ -79,6 +79,82 @@ function HardwareItemCard({
   )
 }
 
+function HardwareItemModal({
+  item,
+  onClose,
+}: {
+  item: HardwareItem
+  onClose: () => void
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm px-4 pb-4 sm:pb-0"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 60, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 60, scale: 0.97 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Image */}
+        <div className="relative h-64 bg-slate-50">
+          <Image
+            src={item.image}
+            alt={item.name}
+            fill
+            className="object-contain p-8"
+            sizes="448px"
+          />
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-slate-50 transition-colors"
+          >
+            <X className="w-4 h-4 text-slate-600" />
+          </button>
+        </div>
+        {/* Info */}
+        <div className="p-6">
+          <h3 className="text-xl font-black text-navy-900">{item.name}</h3>
+          <div className="mt-4 flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+            <div className="flex items-center gap-2">
+              <Package className="w-4 h-4 text-zinc-400" />
+              <span className="text-sm text-slate-600 font-medium">Packet Size</span>
+            </div>
+            <span className="text-sm font-bold text-navy-900">{item.nosPerPacket}</span>
+          </div>
+          <p className="mt-3 text-xs text-slate-400">
+            Available in nickel plated and natural finish. GST & packing charged extra.
+          </p>
+          <div className="mt-5 flex gap-3">
+            <button
+              onClick={() => {
+                onClose()
+                setTimeout(() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }), 200)
+              }}
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Enquire
+            </button>
+            <button
+              onClick={onClose}
+              className="flex-1 py-3 border border-slate-200 text-slate-600 font-semibold rounded-xl hover:border-slate-300 transition-colors text-sm"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 const [domestic, industrial, hardware] = products
 
 export default function Products() {
@@ -103,7 +179,7 @@ export default function Products() {
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-navy-900">AMAR Products</h2>
           <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-            From solar water heaters to precision sheet metal hardware — engineered for quality and reliability.
+            From solar water heaters to precision sheet metal hardware engineered for quality and reliability.
           </p>
         </motion.div>
 
@@ -226,7 +302,18 @@ export default function Products() {
             {/* Hardware Tab */}
             <Tabs.Content value="hardware">
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
-                <div className="grid lg:grid-cols-5 gap-10">
+
+                {/* Mobile-only modal */}
+                <div className="lg:hidden">
+                  <AnimatePresence>
+                    {selectedItem && (
+                      <HardwareItemModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Desktop: sticky sidebar + scrollable grid */}
+                <div className="hidden lg:grid lg:grid-cols-5 gap-10">
 
                   {/* Sidebar card — updates on item click */}
                   <div className="lg:col-span-2">
@@ -256,7 +343,7 @@ export default function Products() {
                               <span className="ml-auto font-bold text-solar-400 text-sm">{sidebarItem!.nosPerPacket}</span>
                             </div>
                             <p className="mt-3 text-white/50 text-xs">
-                              Available in nickel-plated and natural finish. GST & packing charged extra.
+                              Available in nickel plated and natural finish. GST & packing charged extra.
                             </p>
                             <div className="mt-6 flex flex-col gap-3">
                               <button
@@ -332,20 +419,41 @@ export default function Products() {
                         : 'Click any item to see details in the panel on the left.'}
                     </p>
                     <div className="overflow-y-auto max-h-[640px] pr-1">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {hardware.hardwareItems?.map((item, i) => (
-                        <HardwareItemCard
-                          key={item.name}
-                          item={item}
-                          index={i}
-                          selected={selectedItem?.name === item.name}
-                          onClick={() => setSelectedItem(selectedItem?.name === item.name ? null : item)}
-                        />
-                      ))}
-                    </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        {hardware.hardwareItems?.map((item, i) => (
+                          <HardwareItemCard
+                            key={item.name}
+                            item={item}
+                            index={i}
+                            selected={selectedItem?.name === item.name}
+                            onClick={() => setSelectedItem(selectedItem?.name === item.name ? null : item)}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Mobile-only: full-width grid, tap → modal */}
+                <div className="lg:hidden">
+                  <div className="flex items-center gap-3 mb-2">
+                    <CheckCircle2 className="w-5 h-5 text-solar-500" />
+                    <h4 className="font-bold text-navy-900 text-lg">{hardware.hardwareItems?.length} Hardware Items</h4>
+                  </div>
+                  <p className="text-slate-500 text-sm mb-6">Tap any item to see details.</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {hardware.hardwareItems?.map((item, i) => (
+                      <HardwareItemCard
+                        key={item.name}
+                        item={item}
+                        index={i}
+                        selected={selectedItem?.name === item.name}
+                        onClick={() => setSelectedItem(item)}
+                      />
+                    ))}
+                  </div>
+                </div>
+
               </motion.div>
             </Tabs.Content>
           </Tabs.Root>

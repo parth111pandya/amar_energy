@@ -2,18 +2,18 @@ import { Sun, MapPin, Phone, Mail, ExternalLink } from 'lucide-react'
 
 const footerLinks = {
   Company: [
-    { label: 'About Us',    href: '#home' },
-    { label: 'Why Solar?',  href: '#why-solar' },
-    { label: 'Objectives',  href: '#objectives' },
+    { label: 'About Us', href: '#home' },
+    { label: 'Why Solar?', href: '#why-solar' },
+    { label: 'Objectives', href: '#objectives' },
     { label: 'Quality QMS', href: '#quality' },
-    { label: 'Gallery',     href: '#gallery' },
+    { label: 'Gallery', href: '#gallery' },
   ],
   Products: [
-    { label: 'Solar Water Heaters',        href: '#products' },
-    { label: 'Solar Water Heating Systems',href: '#products' },
-    { label: 'Download E-Catalogue',       href: '/e-catalogue-water-heater.pdf' },
-    { label: 'Dimension Sheet',            href: '/Dimension-Solar.pdf' },
-    { label: 'Fitting Instructions',       href: '/FITTING-INSTRUCTIONS-1.pdf' },
+    { label: 'Solar Water Heaters', href: '#products' },
+    { label: 'Solar Water Heating Systems', href: '#products' },
+    { label: 'Download E-Catalogue', href: '/e-catalogue-water-heater.pdf' },
+    { label: 'Dimension Sheet', href: '/Dimension-Solar.pdf' },
+    { label: 'Fitting Instructions', href: '/FITTING-INSTRUCTIONS-1.pdf' },
   ],
 }
 
@@ -34,7 +34,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
-              Delivering world-class solar water heating solutions from Morbi, Gujarat, India.
+              Delivering world class solar water heating solutions from Morbi, Gujarat, India.
               10+ years of innovation, reliability, and transparent partnerships.
             </p>
             <div className="mt-6 space-y-3">
@@ -47,8 +47,14 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-solar-500 flex-shrink-0" />
-                <a href="tel:+919727712345" className="text-sm text-slate-400 hover:text-solar-400 transition-colors">
-                  +91 97277 12345
+                <a href="tel:+919825218572" className="text-sm text-slate-400 hover:text-solar-400 transition-colors">
+                  +91 98252 18572
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-solar-500 flex-shrink-0" />
+                <a href="tel:+919978410572" className="text-sm text-slate-400 hover:text-solar-400 transition-colors">
+                  +91 99784 10572
                 </a>
               </div>
               <div className="flex items-center gap-3">

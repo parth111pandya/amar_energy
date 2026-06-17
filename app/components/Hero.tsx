@@ -7,10 +7,12 @@ import { useState, useEffect } from 'react'
 
 const heroImages = [
   { src: '/gallery-1.png', alt: 'Amar Energy Solar Installation' },
-  { src: '/gallery-3.png', alt: 'Solar Water Heating System' },
   { src: '/gallery-mic8154.jpg', alt: 'Solar Products Gallery' },
   { src: '/gallery-mic8159.jpg', alt: 'Amar Energy Gallery' },
   { src: '/gallery-mic8160.jpg', alt: 'Solar Water Heater Gallery' },
+  { src: '/hardware/hardware-catalog.png', alt: 'Hardware Catalog' },
+  { src: '/hardware/brass-washer.png', alt: 'Brass Washer' },
+  { src: '/hardware/ms-washer.png', alt: 'MS Washer' },
 ]
 
 const stats = [
@@ -104,7 +106,7 @@ export default function Hero() {
                 transition={{ duration: 0.7, delay: 0.35 }}
                 className="mt-6 text-white/70 text-lg leading-relaxed max-w-lg"
               >
-                Amar Energy Industries has been manufacturing world-class solar water
+                Amar Energy Industries has been manufacturing world class solar water
                 heating systems from Morbi, Gujarat for over a decade delivering
                 hot water at 60°C with zero fuel cost, every day.
               </motion.p>
@@ -157,8 +159,8 @@ export default function Hero() {
                   +91 98252 18572
                 </a>
                 <span className="text-white/20">·</span>
-                <a href="tel:02822291509" className="hover:text-white transition-colors">
-                  (02822) 291509
+                <a href="tel:+919978410572" className="hover:text-white transition-colors">
+                  +91 99784 10572
                 </a>
               </motion.div>
             </div>
@@ -186,7 +188,7 @@ export default function Hero() {
                       src={heroImages[current].src}
                       alt={heroImages[current].alt}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                       priority={current === 0}
                       sizes="(max-width: 1024px) 100vw, 50vw"
                     />
@@ -217,9 +219,8 @@ export default function Hero() {
                     <button
                       key={idx}
                       onClick={() => goTo(idx)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        idx === current ? 'w-5 bg-[#C8181B]' : 'w-1.5 bg-white/50 hover:bg-white/80'
-                      }`}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${idx === current ? 'w-5 bg-[#C8181B]' : 'w-1.5 bg-white/50 hover:bg-white/80'
+                        }`}
                       aria-label={`Go to image ${idx + 1}`}
                     />
                   ))}
@@ -237,11 +238,10 @@ export default function Hero() {
                   <button
                     key={idx}
                     onClick={() => goTo(idx)}
-                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                      idx === current
-                        ? 'border-[#C8181B] opacity-100 scale-105'
-                        : 'border-white/10 opacity-50 hover:opacity-80'
-                    }`}
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${idx === current
+                      ? 'border-[#C8181B] opacity-100 scale-105'
+                      : 'border-white/10 opacity-50 hover:opacity-80'
+                      }`}
                   >
                     <Image
                       src={img.src}

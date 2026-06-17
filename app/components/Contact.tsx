@@ -27,8 +27,8 @@ const contactInfo = [
   },
   {
     icon: Phone,
-    label: 'Mobile / Tele-Fax',
-    value: '+91 97277 12345\nFax: 02822-XXXXXX',
+    label: 'Mobile',
+    value: '+91 98252 18572\n+91 99784 10572',
     color: 'text-blue-500',
     bg: 'bg-blue-50',
   },

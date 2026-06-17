@@ -135,7 +135,7 @@ function HardwareItemModal({
           </div>
 
           <p className="mt-3 text-xs text-slate-400">
-            Available in nickel-plated and natural finish. GST & packing charged extra. Subject to Morbi jurisdiction.
+            Available in nickel plated and natural finish. GST & packing charged extra. Subject to Morbi jurisdiction.
           </p>
 
           <div className="mt-5 flex gap-3">
@@ -307,7 +307,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 Complete Item Listing
               </h2>
               <p className="mt-3 text-slate-500 max-w-xl mx-auto">
-                All items available in nickel-plated and natural finish. Packet quantities shown below.
+                All items available in nickel plated and natural finish. Packet quantities shown below.
               </p>
             </motion.div>
             <HardwareCatalogSection items={product.hardwareItems!} onSelect={setSelectedHardwareItem} />
