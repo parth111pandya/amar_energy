@@ -1,6 +1,7 @@
 import {
   Droplets, ThermometerSun, Wrench, Battery, Timer, Shield, Zap,
   CheckCircle2, Sun, Clock, Ruler, Factory, Activity, LucideIcon,
+  Package, Settings, Layers,
 } from 'lucide-react'
 
 export type Feature = {
@@ -12,6 +13,13 @@ export type Feature = {
 export type Spec = {
   label: string
   value: string
+}
+
+export type HardwareItem = {
+  name: string
+  image: string
+  nosPerPacket: string
+  category: 'hinge' | 'hook' | 'washer' | 'handle' | 'other'
 }
 
 export type Product = {
@@ -30,6 +38,7 @@ export type Product = {
   features: Feature[]
   useCases: string[]
   capacities?: string[]
+  hardwareItems?: HardwareItem[]
 }
 
 export const tagColors: Record<string, string> = {
@@ -128,6 +137,69 @@ export const products: Product[] = [
     ],
     useCases: ['Hotels & Resorts', 'Hospitals & Clinics', 'Factories & Industries', 'Hostels & Dormitories', 'Large Housing Societies', 'Educational Institutions'],
     capacities: ['1000 LPD', '2000 LPD', '5000 LPD', '10000 LPD', 'Custom'],
+  },
+  {
+    slug: 'sheet-metal-parts',
+    name: 'AMAR Sheet Metal Parts',
+    shortName: 'Sheet Metal Parts',
+    tagline: 'Hardware & Fixtures',
+    description:
+      'Precision-engineered sheet metal hardware for furniture, cabinets, panels, and industrial applications. All items are manufactured to tight tolerances and available in nickel-plated and natural finishes.',
+    image: '/hardware/hardware-catalog.png',
+    accentFrom: 'from-zinc-800',
+    accentTo: 'to-zinc-900',
+    ctaLabel: 'Enquire About Hardware',
+    ctaType: 'contact',
+    specs: [
+      { label: 'Material', value: 'Sheet Metal' },
+      { label: 'Finish', value: 'Nickel / Natural' },
+      { label: 'SKUs', value: '16+ Items' },
+      { label: 'Min. Order', value: '1 Packet' },
+      { label: 'Application', value: 'Industrial' },
+      { label: 'Origin', value: 'Made in India' },
+    ],
+    features: [
+      { icon: Settings, text: 'Wide range of hinge sizes — 3/4" to 2"', tag: 'Versatility' },
+      { icon: Package, text: 'KAN hooks in 4 sizes for flexible mounting', tag: 'Versatility' },
+      { icon: Layers, text: 'Brass & MS washers — 2mm to 16mm diameter', tag: 'Material' },
+      { icon: Shield, text: 'Nickel-plated finish for corrosion resistance', tag: 'Durability' },
+      { icon: Wrench, text: 'Compatible with furniture, cabinets & panels', tag: 'Versatility' },
+      { icon: CheckCircle2, text: 'Lamination hooks for secure panel fastening', tag: 'Build' },
+      { icon: CheckCircle2, text: 'Side hook zinc for lateral fixing applications', tag: 'Build' },
+      { icon: Factory, text: 'Panel board hinges for heavy-duty enclosures', tag: 'Build' },
+      { icon: Package, text: 'Handles available in two profile styles', tag: 'Design' },
+      { icon: Shield, text: 'Consistent quality across all packet sizes', tag: 'Reliability' },
+    ],
+    useCases: [
+      'Furniture & Cabinet Manufacturing',
+      'Electrical Panel Boards',
+      'Industrial Enclosures',
+      'Woodworking & Joinery',
+      'Plumbing & Automotive (Washers)',
+      'Construction & General Engineering',
+    ],
+    hardwareItems: [
+      // Hinges
+      { name: '2" HINGES',                       image: '/hardware/hinge-2inch.png',           nosPerPacket: '100 Nos', category: 'hinge' },
+      { name: '1.1/2" HINGES',                   image: '/hardware/hinge-1-5inch.png',         nosPerPacket: '100 Nos', category: 'hinge' },
+      { name: '1.1/4" HINGES',                   image: '/hardware/hinge-1-25inch.png',        nosPerPacket: '100 Nos', category: 'hinge' },
+      { name: '1" HINGES (Without Cotetion)',     image: '/hardware/hinge-1inch.png',           nosPerPacket: '100 Nos', category: 'hinge' },
+      { name: '3/4" HINGES (With Cotetion)',      image: '/hardware/hinge-0-75inch-with.png',   nosPerPacket: '500 Nos', category: 'hinge' },
+      { name: '3/4" HINGES (Without Cotetion)',   image: '/hardware/hinge-0-75inch-without.png',nosPerPacket: '500 Nos', category: 'hinge' },
+      // Hooks
+      { name: '2" HOOK (KAN)',                    image: '/hardware/hook-kan-2inch.png',        nosPerPacket: '100 Nos', category: 'hook' },
+      { name: '1.1/2" HOOK (KAN)',                image: '/hardware/hook-kan-1-5inch.png',      nosPerPacket: '100 Nos', category: 'hook' },
+      { name: '1.1/4" HOOK (KAN)',                image: '/hardware/hook-kan-1-25inch.png',     nosPerPacket: '100 Nos', category: 'hook' },
+      { name: '1" HOOK (KAN)',                    image: '/hardware/hook-kan-1inch.png',        nosPerPacket: '100 Nos', category: 'hook' },
+      { name: 'SIDE HOOK ZINC',                   image: '/hardware/hook-side-zinc.png',        nosPerPacket: '500 Nos', category: 'hook' },
+      { name: 'LAMINATION HOOK',                  image: '/hardware/hook-lamination.png',       nosPerPacket: '100 Nos', category: 'hook' },
+      // Handle & Panel
+      { name: 'HANDLE',                           image: '/hardware/handle.png',                nosPerPacket: '100 Nos', category: 'handle' },
+      { name: 'PANEL BOARD',                      image: '/hardware/panel-board.png',           nosPerPacket: '100 Nos', category: 'other' },
+      // Washers
+      { name: 'BRASS WASHER (2mm–16mm)',          image: '/hardware/brass-washer.png',          nosPerPacket: 'As per size', category: 'washer' },
+      { name: 'MS WASHER (2mm–16mm)',             image: '/hardware/ms-washer.png',             nosPerPacket: 'As per size', category: 'washer' },
+    ],
   },
 ]
 

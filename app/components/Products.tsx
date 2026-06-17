@@ -2,11 +2,11 @@
 
 import { motion } from 'framer-motion'
 import * as Tabs from '@radix-ui/react-tabs'
-import { CheckCircle2, ArrowRight } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Package } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { products, tagColors } from '../data/products'
-import type { Feature } from '../data/products'
+import type { Feature, HardwareItem } from '../data/products'
 
 function FeatureGrid({ features }: { features: Feature[] }) {
   return (
@@ -36,7 +36,37 @@ function FeatureGrid({ features }: { features: Feature[] }) {
   )
 }
 
-const [domestic, industrial] = products
+function HardwareItemCard({ item, index }: { item: HardwareItem; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.35, delay: index * 0.04 }}
+      whileHover={{ y: -4 }}
+      className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-zinc-300 transition-all duration-200 overflow-hidden flex flex-col"
+    >
+      <div className="relative h-40 bg-slate-50">
+        <Image
+          src={item.image}
+          alt={item.name}
+          fill
+          className="object-contain p-4"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+        />
+      </div>
+      <div className="p-4 flex-1 flex flex-col justify-between">
+        <p className="text-sm font-bold text-navy-900 leading-snug">{item.name}</p>
+        <div className="mt-2 flex items-center gap-1.5">
+          <Package className="w-3.5 h-3.5 text-zinc-400" />
+          <span className="text-xs text-zinc-500 font-medium">{item.nosPerPacket} / Packet</span>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+const [domestic, industrial, hardware] = products
 
 export default function Products() {
   return (
@@ -53,16 +83,16 @@ export default function Products() {
           <span className="inline-block px-4 py-1.5 bg-solar-100 text-solar-700 text-sm font-semibold rounded-full mb-4">
             Product Lineup
           </span>
-          <h2 className="text-4xl md:text-5xl font-black text-navy-900">AMAR Solar Products</h2>
+          <h2 className="text-4xl md:text-5xl font-black text-navy-900">AMAR Products</h2>
           <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-            From domestic bathrooms to industrial complexes engineered for every hot water need.
+            From solar water heaters to precision sheet metal hardware — engineered for quality and reliability.
           </p>
         </motion.div>
 
         {/* Tabs */}
         <div className="mt-14">
           <Tabs.Root defaultValue="domestic">
-            <Tabs.List className="flex gap-2 p-1.5 bg-slate-100 rounded-2xl max-w-md mx-auto mb-12">
+            <Tabs.List className="flex gap-2 p-1.5 bg-slate-100 rounded-2xl max-w-2xl mx-auto mb-12">
               <Tabs.Trigger
                 value="domestic"
                 className="flex-1 py-3 px-4 text-sm font-semibold rounded-xl text-slate-600
@@ -78,6 +108,14 @@ export default function Products() {
                            transition-all duration-200"
               >
                 🏭 Heating Systems
+              </Tabs.Trigger>
+              <Tabs.Trigger
+                value="hardware"
+                className="flex-1 py-3 px-4 text-sm font-semibold rounded-xl text-slate-600
+                           data-[state=active]:bg-white data-[state=active]:text-solar-600 data-[state=active]:shadow-sm
+                           transition-all duration-200"
+              >
+                🔩 Sheet Metal Parts
               </Tabs.Trigger>
             </Tabs.List>
 
@@ -200,6 +238,68 @@ export default function Products() {
                     </div>
                     <p className="text-slate-500 text-sm">Built for scale, continuity, and maximum energy savings.</p>
                     <FeatureGrid features={industrial.features} />
+                  </div>
+                </div>
+              </motion.div>
+            </Tabs.Content>
+            {/* Hardware Tab */}
+            <Tabs.Content value="hardware">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4 }}
+              >
+                <div className="grid lg:grid-cols-5 gap-10 items-start">
+                  {/* Sidebar card */}
+                  <div className="lg:col-span-2">
+                    <div className="sticky top-24 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-3xl p-8 text-white">
+                      <div className="relative h-52 rounded-2xl overflow-hidden mb-6 bg-white/5">
+                        <Image
+                          src={hardware.image}
+                          alt={hardware.name}
+                          fill
+                          className="object-contain p-4"
+                        />
+                      </div>
+                      <h3 className="text-xl font-bold">{hardware.name}</h3>
+                      <p className="mt-3 text-white/70 text-sm leading-relaxed">{hardware.description}</p>
+                      <div className="mt-6 space-y-3">
+                        {hardware.specs.slice(0, 4).map((spec, i) => (
+                          <div key={i} className="flex justify-between text-sm">
+                            <span className="text-white/60">{spec.label}</span>
+                            <span className="font-bold text-solar-400">{spec.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-6 flex flex-col gap-3">
+                        <button
+                          onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+                          className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
+                        >
+                          Enquire About Hardware
+                        </button>
+                        <Link
+                          href={`/products/${hardware.slug}`}
+                          className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm"
+                        >
+                          View Full Catalogue <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Items grid */}
+                  <div className="lg:col-span-3">
+                    <div className="flex items-center gap-3 mb-2">
+                      <CheckCircle2 className="w-5 h-5 text-solar-500" />
+                      <h4 className="font-bold text-navy-900 text-lg">{hardware.hardwareItems?.length} Hardware Items</h4>
+                    </div>
+                    <p className="text-slate-500 text-sm mb-6">Precision sheet metal parts — available in nickel-plated and natural finish.</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {hardware.hardwareItems?.map((item, i) => (
+                        <HardwareItemCard key={item.name} item={item} index={i} />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </motion.div>

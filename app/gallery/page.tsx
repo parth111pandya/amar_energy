@@ -7,28 +7,46 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
 
 const allImages = [
-  // Product / banner images
-  { src: '/banner-1.jpg',          alt: 'AMAR Solar Water Heater — Field Installation',        category: 'Installation' },
-  { src: '/banner-2.jpg',          alt: 'AMAR Solar Water Heater — Product Detail',            category: 'Product' },
-  { src: '/banner-4.jpg',          alt: 'Make in India — Copper Tank Solar System',            category: 'Product' },
-  { src: '/gallery-1.jpeg',        alt: 'AMAR Energy Installation in Progress',                category: 'Installation' },
+  // Solar product / banner images
+  { src: '/banner-1.jpg',                         alt: 'AMAR Solar Water Heater — Field Installation',    category: 'Solar Products' },
+  { src: '/banner-2.jpg',                         alt: 'AMAR Solar Water Heater — Product Detail',        category: 'Solar Products' },
+  { src: '/banner-4.jpg',                         alt: 'Make in India — Copper Tank Solar System',        category: 'Solar Products' },
+  { src: '/gallery-1.jpeg',                       alt: 'AMAR Energy Installation in Progress',            category: 'Installation' },
   // Gallery folder images (optimised)
-  { src: '/gallery-mic8141.jpg',   alt: 'AMAR Solar Water Heater — Rooftop View',             category: 'Installation' },
-  { src: '/gallery-mic8142.jpg',   alt: 'AMAR Solar Water Heater — Front Profile',            category: 'Product' },
-  { src: '/gallery-mic8143.jpg',   alt: 'AMAR Solar Water Heater — Angle View',               category: 'Product' },
-  { src: '/gallery-mic8144.jpg',   alt: 'AMAR Solar Water Heater — Wide Angle',               category: 'Installation' },
-  { src: '/gallery-mic8151.jpg',   alt: 'AMAR Solar Water Heater — Rear View',                category: 'Product' },
-  { src: '/gallery-mic8154.jpg',   alt: 'AMAR Solar Water Heater — Close-up Tubes',          category: 'Product' },
-  { src: '/gallery-mic8158.jpg',   alt: 'AMAR Solar Water Heater — Side Profile',             category: 'Product' },
-  { src: '/gallery-mic8159.jpg',   alt: 'AMAR Solar Water Heater — Full System View',        category: 'Installation' },
-  { src: '/gallery-mic8160.jpg',   alt: 'AMAR Solar Water Heater — Front View Close',        category: 'Product' },
-  { src: '/gallery-1.png',         alt: 'AMAR Energy Solar Installation',                    category: 'Installation' },
-  { src: '/gallery-2.png',         alt: 'AMAR Energy Solar Installation',                    category: 'Installation' },
-  { src: '/gallery-3.png',         alt: 'AMAR Energy Solar Installation',                    category: 'Installation' },
-  { src: '/gallery-4.png',         alt: 'AMAR Energy Solar Installation',                    category: 'Installation' },
+  { src: '/gallery-mic8141.jpg',                  alt: 'AMAR Solar Water Heater — Rooftop View',         category: 'Installation' },
+  { src: '/gallery-mic8142.jpg',                  alt: 'AMAR Solar Water Heater — Front Profile',        category: 'Solar Products' },
+  { src: '/gallery-mic8143.jpg',                  alt: 'AMAR Solar Water Heater — Angle View',           category: 'Solar Products' },
+  { src: '/gallery-mic8144.jpg',                  alt: 'AMAR Solar Water Heater — Wide Angle',           category: 'Installation' },
+  { src: '/gallery-mic8151.jpg',                  alt: 'AMAR Solar Water Heater — Rear View',            category: 'Solar Products' },
+  { src: '/gallery-mic8154.jpg',                  alt: 'AMAR Solar Water Heater — Close-up Tubes',       category: 'Solar Products' },
+  { src: '/gallery-mic8158.jpg',                  alt: 'AMAR Solar Water Heater — Side Profile',         category: 'Solar Products' },
+  { src: '/gallery-mic8159.jpg',                  alt: 'AMAR Solar Water Heater — Full System View',     category: 'Installation' },
+  { src: '/gallery-mic8160.jpg',                  alt: 'AMAR Solar Water Heater — Front View Close',     category: 'Solar Products' },
+  { src: '/gallery-1.png',                        alt: 'AMAR Energy Solar Installation',                 category: 'Installation' },
+  { src: '/gallery-2.png',                        alt: 'AMAR Energy Solar Installation',                 category: 'Installation' },
+  { src: '/gallery-3.png',                        alt: 'AMAR Energy Solar Installation',                 category: 'Installation' },
+  { src: '/gallery-4.png',                        alt: 'AMAR Energy Solar Installation',                 category: 'Installation' },
+  // Hardware / Sheet Metal Parts
+  { src: '/hardware/hardware-catalog.png',        alt: 'AMAR Hardware — Full Product Range',             category: 'Sheet Metal Parts' },
+  { src: '/hardware/hinge-2inch.png',             alt: '2" Hinges — Sheet Metal',                        category: 'Sheet Metal Parts' },
+  { src: '/hardware/hinge-1-5inch.png',           alt: '1.1/2" Hinges — Sheet Metal',                   category: 'Sheet Metal Parts' },
+  { src: '/hardware/hinge-1-25inch.png',          alt: '1.1/4" Hinges — Sheet Metal',                   category: 'Sheet Metal Parts' },
+  { src: '/hardware/hinge-1inch.png',             alt: '1" Hinges (Without Cotetion) — Sheet Metal',    category: 'Sheet Metal Parts' },
+  { src: '/hardware/hinge-0-75inch-with.png',     alt: '3/4" Hinges (With Cotetion) — Sheet Metal',    category: 'Sheet Metal Parts' },
+  { src: '/hardware/hinge-0-75inch-without.png',  alt: '3/4" Hinges (Without Cotetion) — Sheet Metal', category: 'Sheet Metal Parts' },
+  { src: '/hardware/hook-kan-2inch.png',          alt: '2" Hook (KAN) — Sheet Metal',                   category: 'Sheet Metal Parts' },
+  { src: '/hardware/hook-kan-1-5inch.png',        alt: '1.1/2" Hook (KAN) — Sheet Metal',               category: 'Sheet Metal Parts' },
+  { src: '/hardware/hook-kan-1-25inch.png',       alt: '1.1/4" Hook (KAN) — Sheet Metal',               category: 'Sheet Metal Parts' },
+  { src: '/hardware/hook-kan-1inch.png',          alt: '1" Hook (KAN) — Sheet Metal',                   category: 'Sheet Metal Parts' },
+  { src: '/hardware/hook-side-zinc.png',          alt: 'Side Hook Zinc — Sheet Metal',                  category: 'Sheet Metal Parts' },
+  { src: '/hardware/hook-lamination.png',         alt: 'Lamination Hook — Sheet Metal',                 category: 'Sheet Metal Parts' },
+  { src: '/hardware/handle.png',                  alt: 'Handle — Sheet Metal',                          category: 'Sheet Metal Parts' },
+  { src: '/hardware/panel-board.png',             alt: 'Panel Board Hinge — Sheet Metal',               category: 'Sheet Metal Parts' },
+  { src: '/hardware/brass-washer.png',            alt: 'Brass Washer (2mm–16mm)',                        category: 'Sheet Metal Parts' },
+  { src: '/hardware/ms-washer.png',               alt: 'MS Washer (2mm–16mm)',                           category: 'Sheet Metal Parts' },
 ]
 
-const categories = ['All', 'Product', 'Installation']
+const categories = ['All', 'Solar Products', 'Installation', 'Sheet Metal Parts']
 
 export default function GalleryPage() {
   const [activeCategory, setActiveCategory] = useState('All')
