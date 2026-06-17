@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import { ChevronDown, Menu, X, Sun } from 'lucide-react'
+import { ChevronDown, Menu, X, Sun, Wrench } from 'lucide-react'
 
 const navLinks = [
   { href: '#home',       label: 'Home',       page: false },
@@ -17,8 +17,9 @@ const navLinks = [
 ]
 
 const products = [
-  { label: 'Amar Solar Water Heaters',         href: '/products/solar-water-heaters' },
-  { label: 'Amar Solar Water Heating Systems', href: '/products/solar-water-heating-systems' },
+  { label: 'Amar Solar Water Heaters',         href: '/products/solar-water-heaters',         icon: 'sun' },
+  { label: 'Amar Solar Water Heating Systems', href: '/products/solar-water-heating-systems', icon: 'sun' },
+  { label: 'Sheet Metal Parts',                href: '/products/sheet-metal-parts',           icon: 'wrench' },
 ]
 
 export default function Navigation() {
@@ -125,7 +126,9 @@ export default function Navigation() {
                         onClick={() => setMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-slate-700 hover:bg-solar-50 hover:text-solar-700 cursor-pointer outline-none transition-colors"
                       >
-                        <Sun className="w-4 h-4 text-solar-500 flex-shrink-0" />
+                        {p.icon === 'wrench'
+                          ? <Wrench className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+                          : <Sun className="w-4 h-4 text-solar-500 flex-shrink-0" />}
                         {p.label}
                       </Link>
                     </DropdownMenu.Item>
@@ -186,7 +189,9 @@ export default function Navigation() {
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-2 w-full text-left px-4 py-3 text-slate-700 hover:text-solar-600 hover:bg-solar-50 rounded-lg text-sm transition-colors"
                 >
-                  <Sun className="w-4 h-4 text-solar-500" />
+                  {p.icon === 'wrench'
+                    ? <Wrench className="w-4 h-4 text-zinc-500" />
+                    : <Sun className="w-4 h-4 text-solar-500" />}
                   {p.label}
                 </Link>
               ))}

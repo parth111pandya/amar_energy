@@ -1,12 +1,12 @@
 'use client'
 
 import { notFound } from 'next/navigation'
-import { use } from 'react'
-import { motion } from 'framer-motion'
+import { use, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
-  ArrowLeft, CheckCircle2, ChevronRight, Download, MessageCircle, Package,
+  ArrowLeft, CheckCircle2, ChevronRight, Download, MessageCircle, Package, X,
 } from 'lucide-react'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
@@ -21,7 +21,13 @@ const categoryLabels: Record<string, string> = {
   other: 'Other',
 }
 
-function HardwareCatalogSection({ items }: { items: HardwareItem[] }) {
+function HardwareCatalogSection({
+  items,
+  onSelect,
+}: {
+  items: HardwareItem[]
+  onSelect: (item: HardwareItem) => void
+}) {
   const categories = ['hinge', 'hook', 'washer', 'handle', 'other'] as const
   const grouped = categories.reduce((acc, cat) => {
     const list = items.filter((i) => i.category === cat)
@@ -41,14 +47,15 @@ function HardwareCatalogSection({ items }: { items: HardwareItem[] }) {
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {list.map((item, i) => (
-              <motion.div
+              <motion.button
                 key={item.name}
+                onClick={() => onSelect(item)}
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: i * 0.05 }}
                 whileHover={{ y: -4 }}
-                className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-zinc-300 transition-all duration-200 overflow-hidden flex flex-col"
+                className="w-full text-left bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-solar-300 transition-all duration-200 overflow-hidden flex flex-col cursor-pointer"
               >
                 <div className="relative h-40 bg-slate-50">
                   <Image
@@ -66,12 +73,90 @@ function HardwareCatalogSection({ items }: { items: HardwareItem[] }) {
                     <span className="text-xs text-zinc-500 font-medium">{item.nosPerPacket} / Packet</span>
                   </div>
                 </div>
-              </motion.div>
+              </motion.button>
             ))}
           </div>
         </div>
       ))}
     </div>
+  )
+}
+
+function HardwareItemModal({
+  item,
+  onClose,
+}: {
+  item: HardwareItem
+  onClose: () => void
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm px-4 pb-4 sm:pb-0"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 60, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 60, scale: 0.97 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Image */}
+        <div className="relative h-64 bg-slate-50">
+          <Image
+            src={item.image}
+            alt={item.name}
+            fill
+            className="object-contain p-8"
+            sizes="448px"
+          />
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-slate-50 transition-colors"
+          >
+            <X className="w-4 h-4 text-slate-600" />
+          </button>
+        </div>
+
+        {/* Info */}
+        <div className="p-6">
+          <h3 className="text-xl font-black text-navy-900">{item.name}</h3>
+
+          <div className="mt-4 flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+            <div className="flex items-center gap-2">
+              <Package className="w-4 h-4 text-zinc-400" />
+              <span className="text-sm text-slate-600 font-medium">Packet Size</span>
+            </div>
+            <span className="text-sm font-bold text-navy-900">{item.nosPerPacket}</span>
+          </div>
+
+          <p className="mt-3 text-xs text-slate-400">
+            Available in nickel-plated and natural finish. GST & packing charged extra. Subject to Morbi jurisdiction.
+          </p>
+
+          <div className="mt-5 flex gap-3">
+            <a
+              href="/#contact"
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
+              onClick={onClose}
+            >
+              <MessageCircle className="w-4 h-4" />
+              Enquire
+            </a>
+            <button
+              onClick={onClose}
+              className="flex-1 py-3 border border-slate-200 text-slate-600 font-semibold rounded-xl hover:border-slate-300 transition-colors text-sm"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -82,6 +167,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   if (!product) notFound()
 
   const isHardware = !!product.hardwareItems?.length
+  const [selectedHardwareItem, setSelectedHardwareItem] = useState<HardwareItem | null>(null)
 
   const handleContactScroll = () => {
     window.location.href = '/#contact'
@@ -90,6 +176,16 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <Navigation />
+
+      {/* Hardware item modal */}
+      <AnimatePresence>
+        {selectedHardwareItem && (
+          <HardwareItemModal
+            item={selectedHardwareItem}
+            onClose={() => setSelectedHardwareItem(null)}
+          />
+        )}
+      </AnimatePresence>
       <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white pt-24">
 
         {/* Breadcrumb */}
@@ -214,7 +310,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 All items available in nickel-plated and natural finish. Packet quantities shown below.
               </p>
             </motion.div>
-            <HardwareCatalogSection items={product.hardwareItems!} />
+            <HardwareCatalogSection items={product.hardwareItems!} onSelect={setSelectedHardwareItem} />
           </section>
         )}
 

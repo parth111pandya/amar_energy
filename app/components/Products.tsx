@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import * as Tabs from '@radix-ui/react-tabs'
 import { CheckCircle2, ArrowRight, Package } from 'lucide-react'
 import Image from 'next/image'
@@ -36,39 +37,56 @@ function FeatureGrid({ features }: { features: Feature[] }) {
   )
 }
 
-function HardwareItemCard({ item, index }: { item: HardwareItem; index: number }) {
+function HardwareItemCard({
+  item,
+  index,
+  selected,
+  onClick,
+}: {
+  item: HardwareItem
+  index: number
+  selected: boolean
+  onClick: () => void
+}) {
   return (
-    <motion.div
+    <motion.button
+      onClick={onClick}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.35, delay: index * 0.04 }}
       whileHover={{ y: -4 }}
-      className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-zinc-300 transition-all duration-200 overflow-hidden flex flex-col"
+      className={`w-full text-left bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col
+        ${selected ? 'border-solar-400 ring-2 ring-solar-300 shadow-md' : 'border-slate-100 hover:border-zinc-300'}`}
     >
-      <div className="relative h-40 bg-slate-50">
+      <div className="relative h-36 bg-slate-50">
         <Image
           src={item.image}
           alt={item.name}
           fill
-          className="object-contain p-4"
+          className="object-contain p-3"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
         />
       </div>
-      <div className="p-4 flex-1 flex flex-col justify-between">
-        <p className="text-sm font-bold text-navy-900 leading-snug">{item.name}</p>
-        <div className="mt-2 flex items-center gap-1.5">
-          <Package className="w-3.5 h-3.5 text-zinc-400" />
-          <span className="text-xs text-zinc-500 font-medium">{item.nosPerPacket} / Packet</span>
+      <div className="p-3 flex-1 flex flex-col justify-between">
+        <p className="text-xs font-bold text-navy-900 leading-snug">{item.name}</p>
+        <div className="mt-1.5 flex items-center gap-1">
+          <Package className="w-3 h-3 text-zinc-400" />
+          <span className="text-xs text-zinc-500">{item.nosPerPacket}</span>
         </div>
       </div>
-    </motion.div>
+    </motion.button>
   )
 }
 
 const [domestic, industrial, hardware] = products
 
 export default function Products() {
+  const [selectedItem, setSelectedItem] = useState<HardwareItem | null>(null)
+
+  const sidebarItem = selectedItem ?? null
+  const isItemSelected = !!sidebarItem
+
   return (
     <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,7 +109,7 @@ export default function Products() {
 
         {/* Tabs */}
         <div className="mt-14">
-          <Tabs.Root defaultValue="domestic">
+          <Tabs.Root defaultValue="domestic" onValueChange={() => setSelectedItem(null)}>
             <Tabs.List className="flex gap-2 p-1.5 bg-slate-100 rounded-2xl max-w-2xl mx-auto mb-12">
               <Tabs.Trigger
                 value="domestic"
@@ -121,22 +139,12 @@ export default function Products() {
 
             {/* Domestic Tab */}
             <Tabs.Content value="domestic">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
                 <div className="grid lg:grid-cols-5 gap-10 items-start">
-                  {/* Product image / hero card */}
                   <div className="lg:col-span-2">
                     <div className="sticky top-24 bg-gradient-to-br from-navy-900 to-navy-950 rounded-3xl p-8 text-white">
                       <div className="relative h-52 rounded-2xl overflow-hidden mb-6 bg-white/5">
-                        <Image
-                          src={domestic.image}
-                          alt={domestic.name}
-                          fill
-                          className="object-cover"
-                        />
+                        <Image src={domestic.image} alt={domestic.name} fill className="object-cover" />
                       </div>
                       <h3 className="text-xl font-bold">{domestic.name}</h3>
                       <p className="mt-3 text-white/70 text-sm leading-relaxed">
@@ -148,31 +156,20 @@ export default function Products() {
                         {domestic.specs.slice(0, 4).map((spec, i) => (
                           <div key={i} className="flex justify-between text-sm">
                             <span className="text-white/60">{spec.label}</span>
-                            <span className={`font-bold ${spec.value === 'Nil' ? 'text-green-400' : 'text-solar-400'}`}>
-                              {spec.value}
-                            </span>
+                            <span className={`font-bold ${spec.value === 'Nil' ? 'text-green-400' : 'text-solar-400'}`}>{spec.value}</span>
                           </div>
                         ))}
                       </div>
                       <div className="mt-6 flex flex-col gap-3">
-                        <a
-                          href={domestic.catalogueHref}
-                          download
-                          className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
-                        >
+                        <a href={domestic.catalogueHref} download className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm">
                           Download Catalogue
                         </a>
-                        <Link
-                          href={`/products/${domestic.slug}`}
-                          className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm"
-                        >
+                        <Link href={`/products/${domestic.slug}`} className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm">
                           View Full Details <ArrowRight className="w-4 h-4" />
                         </Link>
                       </div>
                     </div>
                   </div>
-
-                  {/* Features */}
                   <div className="lg:col-span-3">
                     <div className="flex items-center gap-3 mb-2">
                       <CheckCircle2 className="w-5 h-5 text-solar-500" />
@@ -187,26 +184,15 @@ export default function Products() {
 
             {/* Industrial Tab */}
             <Tabs.Content value="industrial">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
                 <div className="grid lg:grid-cols-5 gap-10 items-start">
                   <div className="lg:col-span-2">
                     <div className="sticky top-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 text-white">
                       <div className="relative h-52 rounded-2xl overflow-hidden mb-6 bg-white/5">
-                        <Image
-                          src={industrial.image}
-                          alt={industrial.name}
-                          fill
-                          className="object-cover"
-                        />
+                        <Image src={industrial.image} alt={industrial.name} fill className="object-cover" />
                       </div>
                       <h3 className="text-xl font-bold">{industrial.name}</h3>
-                      <p className="mt-3 text-white/70 text-sm leading-relaxed">
-                        {industrial.description}
-                      </p>
+                      <p className="mt-3 text-white/70 text-sm leading-relaxed">{industrial.description}</p>
                       <div className="mt-6 space-y-3">
                         {industrial.specs.slice(0, 3).map((spec, i) => (
                           <div key={i} className="flex justify-between text-sm">
@@ -216,16 +202,10 @@ export default function Products() {
                         ))}
                       </div>
                       <div className="mt-6 flex flex-col gap-3">
-                        <button
-                          onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-                          className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
-                        >
+                        <button onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })} className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm">
                           Request Industrial Quote
                         </button>
-                        <Link
-                          href={`/products/${industrial.slug}`}
-                          className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm"
-                        >
+                        <Link href={`/products/${industrial.slug}`} className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm">
                           View Full Details <ArrowRight className="w-4 h-4" />
                         </Link>
                       </div>
@@ -242,49 +222,101 @@ export default function Products() {
                 </div>
               </motion.div>
             </Tabs.Content>
+
             {/* Hardware Tab */}
             <Tabs.Content value="hardware">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-              >
-                <div className="grid lg:grid-cols-5 gap-10 items-start">
-                  {/* Sidebar card */}
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+                <div className="grid lg:grid-cols-5 gap-10">
+
+                  {/* Sidebar card — updates on item click */}
                   <div className="lg:col-span-2">
                     <div className="sticky top-24 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-3xl p-8 text-white">
-                      <div className="relative h-52 rounded-2xl overflow-hidden mb-6 bg-white/5">
-                        <Image
-                          src={hardware.image}
-                          alt={hardware.name}
-                          fill
-                          className="object-contain p-4"
-                        />
-                      </div>
-                      <h3 className="text-xl font-bold">{hardware.name}</h3>
-                      <p className="mt-3 text-white/70 text-sm leading-relaxed">{hardware.description}</p>
-                      <div className="mt-6 space-y-3">
-                        {hardware.specs.slice(0, 4).map((spec, i) => (
-                          <div key={i} className="flex justify-between text-sm">
-                            <span className="text-white/60">{spec.label}</span>
-                            <span className="font-bold text-solar-400">{spec.value}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="mt-6 flex flex-col gap-3">
-                        <button
-                          onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-                          className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
-                        >
-                          Enquire About Hardware
-                        </button>
-                        <Link
-                          href={`/products/${hardware.slug}`}
-                          className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm"
-                        >
-                          View Full Catalogue <ArrowRight className="w-4 h-4" />
-                        </Link>
-                      </div>
+                      <AnimatePresence mode="wait">
+                        {isItemSelected ? (
+                          <motion.div
+                            key={sidebarItem!.name}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.25 }}
+                          >
+                            {/* Selected item view */}
+                            <div className="relative h-52 rounded-2xl overflow-hidden mb-6 bg-white">
+                              <Image
+                                src={sidebarItem!.image}
+                                alt={sidebarItem!.name}
+                                fill
+                                className="object-contain p-4"
+                              />
+                            </div>
+                            <h3 className="text-xl font-bold">{sidebarItem!.name}</h3>
+                            <div className="mt-4 flex items-center gap-2 py-3 px-4 bg-white/10 rounded-xl">
+                              <Package className="w-4 h-4 text-solar-400" />
+                              <span className="text-white/70 text-sm">Packet Size</span>
+                              <span className="ml-auto font-bold text-solar-400 text-sm">{sidebarItem!.nosPerPacket}</span>
+                            </div>
+                            <p className="mt-3 text-white/50 text-xs">
+                              Available in nickel-plated and natural finish. GST & packing charged extra.
+                            </p>
+                            <div className="mt-6 flex flex-col gap-3">
+                              <button
+                                onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+                                className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
+                              >
+                                Enquire About This Item
+                              </button>
+                              <button
+                                onClick={() => setSelectedItem(null)}
+                                className="flex items-center justify-center gap-2 w-full py-2.5 bg-white/10 hover:bg-white/20 text-white/70 font-medium rounded-xl transition-colors text-sm"
+                              >
+                                ← Back to Overview
+                              </button>
+                            </div>
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="overview"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.25 }}
+                          >
+                            {/* Default overview */}
+                            <div className="relative h-52 rounded-2xl overflow-hidden mb-6 bg-white/5">
+                              <Image
+                                src={hardware.image}
+                                alt={hardware.name}
+                                fill
+                                className="object-contain p-4"
+                              />
+                            </div>
+                            <h3 className="text-xl font-bold">{hardware.name}</h3>
+                            <p className="mt-3 text-white/70 text-sm leading-relaxed">{hardware.description}</p>
+                            <div className="mt-6 space-y-3">
+                              {hardware.specs.map((spec, i) => (
+                                <div key={i} className="flex justify-between text-sm">
+                                  <span className="text-white/60">{spec.label}</span>
+                                  <span className="font-bold text-solar-400">{spec.value}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="mt-6 flex flex-col gap-3">
+                              <button
+                                onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+                                className="flex items-center justify-center gap-2 w-full py-3 bg-solar-500 hover:bg-solar-600 text-white font-semibold rounded-xl transition-colors text-sm"
+                              >
+                                Enquire About Hardware
+                              </button>
+                              <Link
+                                href={`/products/${hardware.slug}`}
+                                className="flex items-center justify-center gap-2 w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-colors text-sm"
+                              >
+                                View Full Catalogue <ArrowRight className="w-4 h-4" />
+                              </Link>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </div>
 
@@ -294,11 +326,23 @@ export default function Products() {
                       <CheckCircle2 className="w-5 h-5 text-solar-500" />
                       <h4 className="font-bold text-navy-900 text-lg">{hardware.hardwareItems?.length} Hardware Items</h4>
                     </div>
-                    <p className="text-slate-500 text-sm mb-6">Precision sheet metal parts — available in nickel-plated and natural finish.</p>
+                    <p className="text-slate-500 text-sm mb-6">
+                      {isItemSelected
+                        ? `Showing details for "${sidebarItem!.name}" — click any other item to switch.`
+                        : 'Click any item to see details in the panel on the left.'}
+                    </p>
+                    <div className="overflow-y-auto max-h-[640px] pr-1">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       {hardware.hardwareItems?.map((item, i) => (
-                        <HardwareItemCard key={item.name} item={item} index={i} />
+                        <HardwareItemCard
+                          key={item.name}
+                          item={item}
+                          index={i}
+                          selected={selectedItem?.name === item.name}
+                          onClick={() => setSelectedItem(selectedItem?.name === item.name ? null : item)}
+                        />
                       ))}
+                    </div>
                     </div>
                   </div>
                 </div>

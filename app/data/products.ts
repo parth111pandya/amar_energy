@@ -152,8 +152,6 @@ export const products: Product[] = [
     ctaType: 'contact',
     specs: [
       { label: 'Material', value: 'Sheet Metal' },
-      { label: 'Finish', value: 'Nickel / Natural' },
-      { label: 'SKUs', value: '16+ Items' },
       { label: 'Min. Order', value: '1 Packet' },
       { label: 'Application', value: 'Industrial' },
       { label: 'Origin', value: 'Made in India' },
